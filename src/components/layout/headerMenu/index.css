@@ -1,0 +1,10 @@
+.MuiButtonBase-root:hover{
+    background-color: #8080803d !important;
+    /* cursor: pointer; */
+}
+.MuiDrawer-paper{
+    background: #04021bf0 !important;
+}
+.clrwhite{
+    color: rgba(255, 255, 255, 0.932) !important;
+}

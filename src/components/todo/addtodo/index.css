@@ -1,0 +1,16 @@
+.describe{
+    overflow-y: hidden;
+    height: 200px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea:focus,.MuiInputBase-input{
+    outline: none !important;
+}
+
+.Mui-selected {
+    outline: none,                                                                   
+}
