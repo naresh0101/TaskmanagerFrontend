@@ -1,13 +1,25 @@
 import React from 'react';
 import './App.css';
-import ResponsiveDrawer from './components/layout/dasebord/Dasebord';
+import Panal from "./components/layout/dasebord/Dasebord";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Error_404 from "./components/404/Error_404";
+
 
 
 
 function App() {
   return (
     <div className="App">
-      <ResponsiveDrawer />
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Panal} />
+          {/* <Route exact path="/login" component={Login} /> */}
+          {/* <Route exact path="/register" component={Register} /> */}
+          {/* <Route exact path="/searchexperts" component={Searchresults} /> */}
+          {/* <Route exact path="/export/profile" component={Profile} /> */}
+          <Route component={Error_404} />
+        </Switch>
+      </Router>
     </div>
   );
 }

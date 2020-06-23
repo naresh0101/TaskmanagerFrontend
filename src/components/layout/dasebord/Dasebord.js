@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ResponsiveDrawer(props) {
+function Panal(props) {
     const classes = useStyles();
 
     return (
@@ -34,4 +34,4 @@ function ResponsiveDrawer(props) {
     );
 }
 
-export default ResponsiveDrawer;
+export default Panal;

@@ -14,3 +14,11 @@ textarea:focus,.MuiInputBase-input{
 .Mui-selected {
     outline: none,                                                                   
 }
+
+.glbbtn{
+    margin-left: 5px !important;
+    color: #009be5 !important;
+}
+.glbbtn:focus{
+    outline: none;
+}

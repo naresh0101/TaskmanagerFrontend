@@ -3,7 +3,7 @@ import { Card, TextField, Input, Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import Box from "@material-ui/core/Box";
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 import "./index.css"
 
@@ -14,6 +14,7 @@ class Assigntask extends Component {
         this.state = {
             age: '',
             open: false,
+            selectedDate: new Date('2014-08-18T21:11:54'),
             top100Films:[
                 { title: 'The Shawshank Redemption', year: 1994 },
                 { title: 'The Godfather', year: 1972 },
@@ -37,6 +38,9 @@ class Assigntask extends Component {
 
     handleOpen = () => {
         this.setState({ open: true })
+    };
+    handleDateChange = (date) => {
+      this.setState({ selectedDate: date})
     };
     render() {
         return (
@@ -97,10 +101,17 @@ class Assigntask extends Component {
                 </Grid>
                 <div
                   justifyContent="flex-end"
-                  style={{ width: '100%', height: "40px", display:"flex", justifyContent:"flex-end" }}
+                  style={{
+                    width: "100%",
+                    height: "40px",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
                 >
-                  <Button >Default</Button>
-                  <Button >Default</Button>
+                  <Button variant="outlined">cancle</Button>
+                  <Button variant="outlined" className="glbbtn">
+                    Create <NavigateNextIcon />
+                  </Button>
                 </div>
               </Grid>
             </Card>
