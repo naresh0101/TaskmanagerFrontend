@@ -1,0 +1,15 @@
+.account{
+    padding-top: 100px;
+    width: 100% !important;
+    height: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+}
+.account-btn{
+    background: #009be5 !important;
+    color: white !important;
+}
+.account-btn:hover{
+     background: #009be5 !important;
+    color: white !important;
+}
