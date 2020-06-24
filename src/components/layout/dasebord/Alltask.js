@@ -2,9 +2,7 @@ import React from "react";
 import Nav from "../nav/Nav";
 import Sideheader from "../Sideheader/Sideheader";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import Alltodo from "../../todo/alltodo/Alltodo";
-import Assigntask from "../../todo/addtodo/Assigntask";
 
 
 
@@ -19,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Panal(props) {
+function Alltask(props) {
     const classes = useStyles();
 
     return (
@@ -27,11 +25,10 @@ function Panal(props) {
         <Nav />
         <Sideheader />
         <main className={classes.content}>
-            <Alltodo/>
-            <Assigntask/>
+          <Alltodo/>
         </main>
       </div>
     );
 }
 
-export default Panal;
+export default Alltask;

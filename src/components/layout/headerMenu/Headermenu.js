@@ -19,6 +19,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 
 import "./index.css"
 import { Avatar } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -93,57 +94,71 @@ export default function SIdemenu() {
       </div>
       <Divider />
       <List>
-        <ListItem button>
-          <ListItemIcon className="clrwhite">
-            <SendIcon />
-          </ListItemIcon>
-          <ListItemText className="clrwhite" primary={`Chat`} />
-        </ListItem>
-
-        <ListItem button>
-        <ListItemIcon className="clrwhite">
-          <PersonAddIcon />
-        </ListItemIcon>
-        <ListItemText className="clrwhite" primary={`Add user`} />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon className="clrwhite">
-            <FolderIcon />
-          </ListItemIcon>
-          <ListItemText className="clrwhite" primary={`Projects`} />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon className="clrwhite">
-            <AssignmentIcon />
-          </ListItemIcon>
-          <ListItemText className="clrwhite" primary={`Pendding`} />
-        </ListItem>
-        <ListItem button>
-        <ListItemIcon className="clrwhite">
-            <NoteAddIcon />
-        </ListItemIcon>
-        <ListItemText className="clrwhite" primary={`Assigm task`} />
-        </ListItem>
-        <ListItem button>
-        <ListItemIcon className="clrwhite">
-            <CloudDoneIcon />
-        </ListItemIcon>
-        <ListItemText className="clrwhite" primary={`Completed`} />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon className="clrwhite">
-            <PermContactCalendarIcon />
-        </ListItemIcon>
-        <ListItemText className="clrwhite" primary={`Profile`} />
-        </ListItem>
-        <ListItem button>
-        <ListItemIcon className="clrwhite">
-            <MeetingRoomIcon />
-        </ListItemIcon>
-        <ListItemText className="clrwhite" primary={`Logout`} />
-        </ListItem>
+        <Link to="/chat">
+          <ListItem button>
+            <ListItemIcon className="clrwhite">
+              <SendIcon />
+            </ListItemIcon>
+            <ListItemText className="clrwhite" primary={`Chat`} />
+          </ListItem>
+        </Link>
+        <Link to="/adduser">
+          <ListItem button>
+            <ListItemIcon className="clrwhite">
+              <PersonAddIcon />
+            </ListItemIcon>
+            <ListItemText className="clrwhite" primary={`Add user`} />
+          </ListItem>
+        </Link>
+        <Link to="/projects">
+          <ListItem button>
+            <ListItemIcon className="clrwhite">
+              <FolderIcon />
+            </ListItemIcon>
+            <ListItemText className="clrwhite" primary={`Projects`} />
+          </ListItem>
+        </Link>
+        <Link to="/tasks">
+          <ListItem button>
+            <ListItemIcon className="clrwhite">
+              <AssignmentIcon />
+            </ListItemIcon>
+            <ListItemText className="clrwhite" primary={`Tasks`} />
+          </ListItem>
+        </Link>
+        <Link to="/assign-task">
+          <ListItem button>
+            <ListItemIcon className="clrwhite">
+              <NoteAddIcon />
+            </ListItemIcon>
+            <ListItemText className="clrwhite" primary={`Assigm task`} />
+          </ListItem>
+        </Link>
+        <Link to="/Completed">
+          <ListItem button>
+            <ListItemIcon className="clrwhite">
+              <CloudDoneIcon />
+            </ListItemIcon>
+            <ListItemText className="clrwhite" primary={`Completed`} />
+          </ListItem>
+        </Link>
+        <Link to="profile">
+          <ListItem button>
+            <ListItemIcon className="clrwhite">
+              <PermContactCalendarIcon />
+            </ListItemIcon>
+            <ListItemText className="clrwhite" primary={`Profile`} />
+          </ListItem>
+        </Link>
+        <Link to="/login">
+          <ListItem button>
+            <ListItemIcon className="clrwhite">
+              <MeetingRoomIcon />
+            </ListItemIcon>
+            <ListItemText className="clrwhite" primary={`Logout`} />
+          </ListItem>
+        </Link>
       </List>
-      {/* <Divider /> */}
     </Drawer>
   );
 } 
