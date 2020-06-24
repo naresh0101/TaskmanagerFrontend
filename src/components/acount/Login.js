@@ -20,8 +20,6 @@ import "./index.css";
 
 class Login extends Component {
   state = {
-    email: "",
-    password: "",
     token: null,
     isLoggedIn: false,
     errormsg: "hello",
@@ -42,11 +40,10 @@ class Login extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const payload = {
-      email: document.getElementById("email").value,
-      password: document.getElementById("password").value,
+      email: event.target.elements.email.value,
+      password: event.target.elements.password.value,
     };
     BaseService.postResponse("login", payload).then((resp) => {
-      console.log(resp.data);
       if (resp.data.token) {
         this.setState({ isLoggedIn: true, user: resp.data });
         reactLocalStorage.set("token", resp.data.token);
@@ -56,7 +53,7 @@ class Login extends Component {
   };
   render() {
     if (this.state.isLoggedIn) {
-      return <Redirect to="/tasks" />;
+      return <Redirect to="/" />;
     }
     return (
       <div className="account">
@@ -95,7 +92,7 @@ class Login extends Component {
                   fullWidth
                   type="email"
                   placeholder="email "
-                  id="email"
+                  name="email"
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -104,7 +101,7 @@ class Login extends Component {
                   margin="dense"
                   type={this.state.showPassword ? "text" : "password"}
                   placeholder="Password"
-                  id="password"
+                  name="password"
                   endAdornment={
                     <InputAdornment>
                       <IconButton onClick={this.handleClickShowPassword}>

@@ -8,3 +8,6 @@
 .clrwhite{
     color: rgba(255, 255, 255, 0.932) !important;
 }
+a{
+    text-decoration: none !important;
+}

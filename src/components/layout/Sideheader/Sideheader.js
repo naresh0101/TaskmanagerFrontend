@@ -3,7 +3,6 @@ import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import { makeStyles } from "@material-ui/core/styles";
 import Sidemenu from "../headerMenu/Headermenu";
-import { connect } from "react-redux";
 
 
 const drawerWidth = 240;

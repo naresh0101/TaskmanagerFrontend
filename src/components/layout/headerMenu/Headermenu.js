@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
@@ -20,6 +20,38 @@ import FolderIcon from '@material-ui/icons/Folder';
 import "./index.css"
 import { Avatar } from "@material-ui/core";
 import { Link } from "react-router-dom";
+
+
+import Badge from "@material-ui/core/Badge";
+
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "$ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
+      content: '""',
+    },
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1,
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0,
+    },
+  },
+}))(Badge);
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -62,15 +94,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SIdemenu() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
-  const handleDrawerClose = ()=>{
-
-  }
-
+  const [open] = React.useState(true);
   return (
     <Drawer
       className={classes.drawer}
@@ -84,11 +108,20 @@ export default function SIdemenu() {
       <div className={classes.drawerHeader}>
         <ListItem>
           <ListItemIcon className="clrwhite">
-            <Avatar alt="name" src="http" />
+            <StyledBadge
+              overlap="circle"
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              variant="dot"
+            >
+              <Avatar alt="Naresh" src="" />
+            </StyledBadge>
           </ListItemIcon>
           <ListItemText className="clrwhite" primary={`Hi Naresh !`} />
         </ListItem>
-        <IconButton onClick={handleDrawerClose}>
+        <IconButton>
           <ChevronLeftIcon />
         </IconButton>
       </div>

@@ -6,8 +6,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { connect } from "react-redux";
-
 const drawerWidth = 240;
 
 

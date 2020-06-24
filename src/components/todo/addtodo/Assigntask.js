@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { Card, TextField, Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import FormControl from '@material-ui/core/FormControl';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import { reactLocalStorage } from "reactjs-localstorage";
+import PostApiService from "../../../api/postResponse"
+import GetApiService from "../../../api/GetResponse";
 
 import "./index.css"
 
@@ -11,22 +13,25 @@ class Assigntask extends Component {
     constructor(props) {
         super(props)
     
-        this.state = {
-            age: '',
-            open: false,
-            selectedDate: new Date('2014-08-18T21:11:54'),
-            top100Films:[
-                { title: 'The Shawshank Redemption', year: 1994 },
-                { title: 'The Godfather', year: 1972 },
-                { title: 'The Godfather: Part II', year: 1974 },
-                { title: 'The Dark Knight', year: 2008 },
-                { title: '12 Angry Men', year: 1957 },
-                { title: "Schindler's List", year: 1993 },
-                { title: 'Pulp Fiction', year: 1994 },
-                { title: 'The Lord of the Rings: The Return of the King', year: 2003 },
-                { title: 'The Good, the Bad and the Ugly', year: 1966 },]
+    this.state = {
+      age: "",
+      open: false,
+      selectedDate: new Date("2014-08-18T21:11:54"),
+      allusers: [],
+      allprojec: [
+        { project: "office" },
+        { project: "Home" },
+        { project: "Collage" },
+        { project: "Personal" },
+      ],
+    };
+    }
 
-        }
+    componentWillMount(){
+      GetApiService.getResponse("getusers",
+      reactLocalStorage.get('token')).then((resp)=>{
+        this.setState({allusers:resp.data})
+      });
     }
     handleChange = (event) => {
         this.setState({ age: event.target.value})
@@ -42,23 +47,36 @@ class Assigntask extends Component {
     handleDateChange = (date) => {
       this.setState({ selectedDate: date})
     };
+    handleSubmit = (event) => {
+      event.preventDefault();
+      const payload = {
+        title: event.target.elements.tasktitle.value,
+        assignto: event.target.elements.assignto.value,
+        project: event.target.elements.project.value,
+        describe: event.target.elements.describe.value,
+      };
+      PostApiService.postResponse('gettasks',
+      reactLocalStorage.get('token')).then((resp)=>{
+          this.setState({ errormsg: resp.data.message, alert: "block" });
+      }); // handle errors if needed
+    };
     render() {
         return (
-          <FormControl>
+          <form onSubmit={this.handleSubmit}>
             <Card style={{ padding: "10px" }}>
               <Grid container spacing={1}>
                 <Grid item xs={6} sm={6}>
                   <Autocomplete
-                    fullWidth
                     id="size-small-outlined"
                     size="small"
-                    options={this.state.top100Films}
-                    getOptionLabel={(option) => option.title}
-                    defaultValue={this.state.top100Films[13]}
+                    options={this.state.allprojec}
+                    getOptionLabel={(option) => option.project}
+                    defaultValue={this.state.allprojec[13]}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         variant="outlined"
+                        name="project"
                         placeholder="Project"
                       />
                     )}
@@ -66,16 +84,16 @@ class Assigntask extends Component {
                 </Grid>
                 <Grid item xs={6} sm={6}>
                   <Autocomplete
-                    fullWidth
                     id="size-small-outlined"
                     size="small"
-                    options={this.state.top100Films}
-                    getOptionLabel={(option) => option.title}
-                    defaultValue={this.state.top100Films[13]}
+                    options={this.state.allusers}
+                    getOptionLabel={(option) => option.email}
+                    defaultValue={this.state.allusers[13]}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         variant="outlined"
+                        name="assignto"
                         placeholder="Assign to"
                       />
                     )}
@@ -86,20 +104,19 @@ class Assigntask extends Component {
                     variant="outlined"
                     size="small"
                     fullWidth
-                    placeholder="Task Title"
+                    name="tasktitle"
+                    placeholder="Task title .... "
                   />
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <textarea
                     className="describe"
                     size="small"
-                    fullWidth
+                    name="describe"
                     placeholder="Please describe task... "
-                    spellcheck="true"
                   />
                 </Grid>
                 <div
-                  justifyContent="flex-end"
                   style={{
                     width: "100%",
                     height: "40px",
@@ -108,13 +125,13 @@ class Assigntask extends Component {
                   }}
                 >
                   <Button variant="outlined">cancle</Button>
-                  <Button variant="outlined" className="glbbtn">
+                  <Button variant="outlined" className="glbbtn" type="submit">
                     Create <NavigateNextIcon />
                   </Button>
                 </div>
               </Grid>
             </Card>
-          </FormControl>
+          </form>
         );
     }
 }

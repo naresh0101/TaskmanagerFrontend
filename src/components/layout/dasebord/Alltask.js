@@ -3,8 +3,8 @@ import Nav from "../nav/Nav";
 import Sideheader from "../Sideheader/Sideheader";
 import { makeStyles } from "@material-ui/core/styles";
 import Alltodo from "../../todo/alltodo/Alltodo";
-
-
+import { reactLocalStorage } from "reactjs-localstorage";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +19,11 @@ const useStyles = makeStyles((theme) => ({
 
 function Alltask(props) {
     const classes = useStyles();
+    if(!reactLocalStorage.get('token')){
+      return(
+        <Redirect to="/login" />
+      )
+    }
 
     return (
       <div className={classes.root}>

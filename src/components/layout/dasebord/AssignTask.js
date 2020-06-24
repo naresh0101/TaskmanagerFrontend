@@ -3,6 +3,8 @@ import Nav from "../nav/Nav";
 import Sideheader from "../Sideheader/Sideheader";
 import { makeStyles } from "@material-ui/core/styles";
 import Assigntask from "../../todo/addtodo/Assigntask";
+import { reactLocalStorage } from "reactjs-localstorage";
+import {Redirect } from "react-router-dom";
 
 
 
@@ -19,6 +21,12 @@ const useStyles = makeStyles((theme) => ({
 
 function AssignTask(props) {
     const classes = useStyles();
+    if (!reactLocalStorage.get('token')) {
+        return (
+            <Redirect to="/login" />
+        )
+    }
+
     return (
         <div className={classes.root}>
             <Nav />
