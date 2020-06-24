@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { TextField, Button } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import FormControl from "@material-ui/core/FormControl";
 import Box from "@material-ui/core/Box";
 import {
   InputAdornment,
@@ -11,23 +10,54 @@ import {
 } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { reactLocalStorage } from "reactjs-localstorage";
+import BaseService from "../../api/postResponse"
+import Alert from "@material-ui/lab/Alert";
 import "./index.css";
 
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-     
-    };
+class Login extends Component {
+  state = {
+    email: "",
+    password: "",
+    token: null,
+    isLoggedIn: false,
+    errormsg: "hello",
+    alert:'none',
+  };
+
+  componentWillMount() {
+    if (reactLocalStorage.get("token")) {
+      this.setState({
+        isLoggedIn: true,
+      });
+    }
   }
 
   handleClickShowPassword = () => {
     this.setState({ showPassword: !this.state.showPassword });
   };
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const payload = {
+      email: document.getElementById("email").value,
+      password: document.getElementById("password").value,
+    };
+    BaseService.postResponse("login", payload).then((resp) => {
+      console.log(resp.data);
+      if (resp.data.token) {
+        this.setState({ isLoggedIn: true, user: resp.data });
+        reactLocalStorage.set("token", resp.data.token);
+      }
+      this.setState({ errormsg: resp.data.message, alert:'block' });
+    }); // handle errors if needed
+  };
   render() {
+    if (this.state.isLoggedIn) {
+      return <Redirect to="/tasks" />;
+    }
     return (
       <div className="account">
         <Box
@@ -35,7 +65,7 @@ class Login extends Component {
           bgcolor="background.paper"
           m={1}
           p={1}
-          style={{ width: "400px", height: "500px" }}
+          style={{ width: "500px", height: "500px" }}
         >
           <Typography>
             <span
@@ -52,21 +82,20 @@ class Login extends Component {
           <Typography color="textSecondary">Welcome back!</Typography>
           <br />
           <br />
+          <Alert severity="error" style={{ display: this.state.alert }}>
+            {this.state.errormsg}
+          </Alert>
           <br />
-          <br />
-          <br />
-          <br />
-
-          <FormControl>
-            <Grid container spacing={1} sm={12}>
+          <form onSubmit={this.handleSubmit}>
+            <Grid container spacing={1} item>
               <Grid item xs={6} sm={12}>
                 <TextField
-                  focusVisible
                   variant="outlined"
                   size="small"
                   fullWidth
                   type="email"
                   placeholder="email "
+                  id="email"
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -75,6 +104,7 @@ class Login extends Component {
                   margin="dense"
                   type={this.state.showPassword ? "text" : "password"}
                   placeholder="Password"
+                  id="password"
                   endAdornment={
                     <InputAdornment>
                       <IconButton onClick={this.handleClickShowPassword}>
@@ -95,6 +125,7 @@ class Login extends Component {
                   color="primary"
                   fullWidth
                   className="account-btn"
+                  type="submit"
                 >
                   Login
                 </Button>
@@ -105,7 +136,7 @@ class Login extends Component {
                 </Typography>
               </Link>
             </Grid>
-          </FormControl>
+          </form>
         </Box>
       </div>
     );

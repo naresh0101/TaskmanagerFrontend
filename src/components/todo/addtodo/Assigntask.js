@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, TextField, Input, Button } from '@material-ui/core';
+import { Card, TextField, Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -83,7 +83,6 @@ class Assigntask extends Component {
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <TextField
-                    focusVisible
                     variant="outlined"
                     size="small"
                     fullWidth

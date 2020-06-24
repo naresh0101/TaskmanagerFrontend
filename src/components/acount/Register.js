@@ -13,6 +13,7 @@ import {
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { Link } from "react-router-dom";
+import Alert from "@material-ui/lab/Alert";
 import "./index.css";
 
 
@@ -45,8 +46,10 @@ class Register extends Component {
           bgcolor="background.paper"
           m={1}
           p={1}
-          style={{ width: "400px", height: "500px" }}
+          style={{ width: "500px", height: "500px" }}
         >
+          <Alert severity="error">This is an error alert — check it out!</Alert>
+
           <Typography>
             <span
               style={{
@@ -66,14 +69,11 @@ class Register extends Component {
           <br />
           <br />
           <br />
-          <br />
-          <br />
 
           <FormControl>
             <Grid container spacing={1} sm={12}>
               <Grid item xs={12} sm={12}>
                 <TextField
-                  focusVisible
                   variant="outlined"
                   size="small"
                   fullWidth
@@ -99,7 +99,6 @@ class Register extends Component {
               </Grid>
               <Grid item xs={12} sm={12}>
                 <TextField
-                  focusVisible
                   variant="outlined"
                   size="small"
                   fullWidth
@@ -138,9 +137,11 @@ class Register extends Component {
                   Register
                 </Button>
               </Grid>
-            <Link to="/login" >
-                <Typography style={{marginLeft:"4px"}} color="textSecondary">I have account...</Typography>
-            </Link>
+              <Link to="/login">
+                <Typography style={{ marginLeft: "4px" }} color="textSecondary">
+                  I have account...
+                </Typography>
+              </Link>
             </Grid>
           </FormControl>
         </Box>
