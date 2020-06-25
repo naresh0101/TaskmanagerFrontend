@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { TextField, Button } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import BaseService from "../../api/postResponse";
+import PostApiService from "../../api/postResponse";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import Box from "@material-ui/core/Box";
 import {
@@ -14,6 +14,7 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { Link, Redirect } from "react-router-dom";
 import Alert from "@material-ui/lab/Alert";
+import { reactLocalStorage } from "reactjs-localstorage";
 import "./index.css";
 
 
@@ -21,9 +22,10 @@ class Register extends Component {
   state = {
     selectedDate: new Date("2014-08-18T21:11:54"),
     usertype: [{ type: "normal" }, { type: "admin" }, { type: "SDE" }],
-    errormsg: "hello",
     alert: "none",
     send2login:false,
+    errormsg: "Hello Thanks, for coming Taskmanager ",
+    alerttype: 'info'
   };
 
   handleDateChange = (date) => {
@@ -35,30 +37,30 @@ class Register extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const payload = {
+      name: event.target.elements.fullname.value,
       email: event.target.elements.email.value,
       password: event.target.elements.password.value,
-      usertype: event.target.elements.usertype.value,
-      name: event.target.elements.fullname.value,
+      usertype: event.target.elements.usertype.value
     };
-    BaseService.postResponse("register", payload).then((resp) => {
-      if (resp.data.success) {
+    PostApiService.acountResponse("register", payload).then((resp) => {
+      if (resp.success) {
         this.setState({ send2login: true });
       }
-      this.setState({ errormsg: resp.data.message, alert: "block" });
+      this.setState({ errormsg: resp.message, alerttype: "error" });
     }); // handle errors if needed
   };
   render() {
-    if (this.state.send2login) {
-      return <Redirect to="/login" />;
-    }
-    return (
+    if (reactLocalStorage.get("token")) {
+      return <Redirect to="/tasks" />;
+    }else{
+      return (
       <div className="account">
         <Box
           boxShadow={3}
           bgcolor="background.paper"
           m={1}
           p={1}
-          style={{ width: "500px", height: "500px" }}
+          style={{ width: "500px", height: "500px", padding: "20px"  }}
         >
           <Typography>
             <span
@@ -75,10 +77,7 @@ class Register extends Component {
           <Typography color="textSecondary">
             Welcome to task manager!
           </Typography>
-          <br />
-          <br />
-          <br />
-          <Alert severity="error" style={{ display: this.state.alert }}>
+          <Alert severity={this.state.alerttype} style={{ marginTop: "50px" }}>
             {this.state.errormsg}
           </Alert>
           <br />
@@ -164,7 +163,7 @@ class Register extends Component {
           </form>
         </Box>
       </div>
-    );
+    )};
   }
 }
 

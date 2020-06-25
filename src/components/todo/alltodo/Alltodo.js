@@ -57,9 +57,12 @@ export default function Alltodo() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [tasks, settasks] = useState([])
-    const handleClick = () => {
-      setOpen(!open);
-    };
+  function handleCollapse(id){
+    
+  }
+  const handleClick = () => {
+    setOpen(!open);
+  };
 
       
     useEffect(() => {
@@ -68,11 +71,13 @@ export default function Alltodo() {
         settasks(resp.data);
       })
       
-    })
+    })    
     function formatDate(string){
         var options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(string).toLocaleDateString([],options);
     }
+
+
 
   return (
     <Fragment>
@@ -87,7 +92,6 @@ export default function Alltodo() {
             <Box boxShadow={2} bgcolor="background.paper">
               <ListItem
                 style={{ cursor: "pointer" }}
-                id={tasks._id}
                 onClick={handleClick}
               >
                 <IconButton aria-label="delete" className={classes.margin}>
@@ -115,7 +119,7 @@ export default function Alltodo() {
                 <ListItemText
                   // onClick={handleClick}
                   title="Click to more info"
-                  primary={tasks.title}
+                  primary={tasks.tasktitle}
                 />
                 <p variant="h6" style={{ marginRight: "5px" }}>
                   {formatDate(tasks.createdAt)}
@@ -135,12 +139,17 @@ export default function Alltodo() {
               </ListItem>
             </Box>
             <Box boxShadow={1} bgcolor="background.paper">
-              <Collapse in={open}>
+              <Collapse in={handleCollapse({index})} id={index}>
                 <List disablePadding>
+                  <ListItem className={classes.nested}>
+                    <ListItemText primary={`Assign by     ${tasks.assignby}`} />
+                    <Divider />
+                  </ListItem>
                   <ListItem className={classes.nested}>
                     <ListItemText secondary={tasks.describe} />
                     <Divider />
                   </ListItem>
+                  
                 </List>
               </Collapse>
             </Box>

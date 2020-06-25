@@ -12,7 +12,7 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { Link, Redirect } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
-import BaseService from "../../api/postResponse"
+import PostApiService from "../../api/postResponse";
 import Alert from "@material-ui/lab/Alert";
 import "./index.css";
 
@@ -21,18 +21,9 @@ import "./index.css";
 class Login extends Component {
   state = {
     token: null,
-    isLoggedIn: false,
-    errormsg: "hello",
-    alert:'none',
+    errormsg: "login with your credentials",
+    alerttype:'info'
   };
-
-  componentWillMount() {
-    if (reactLocalStorage.get("token")) {
-      this.setState({
-        isLoggedIn: true,
-      });
-    }
-  }
 
   handleClickShowPassword = () => {
     this.setState({ showPassword: !this.state.showPassword });
@@ -43,100 +34,101 @@ class Login extends Component {
       email: event.target.elements.email.value,
       password: event.target.elements.password.value,
     };
-    BaseService.postResponse("login", payload).then((resp) => {
-      if (resp.data.token) {
-        this.setState({ isLoggedIn: true, user: resp.data });
-        reactLocalStorage.set("token", resp.data.token);
+    PostApiService.acountResponse("login", payload).then((resp) => {
+      console.log(resp.user);      
+      if (resp.user.api_key) {        
+        reactLocalStorage.set('token',resp.user.api_key)
+        reactLocalStorage.set('user', JSON.stringify([resp.user]))
       }
-      this.setState({ errormsg: resp.data.message, alert:'block' });
-    }); // handle errors if needed
+      this.setState({ errormsg: resp.message, alerttype: "error" });
+    });
   };
   render() {
-    if (this.state.isLoggedIn) {
-      return <Redirect to="/" />;
-    }
-    return (
-      <div className="account">
-        <Box
-          boxShadow={3}
-          bgcolor="background.paper"
-          m={1}
-          p={1}
-          style={{ width: "500px", height: "500px" }}
-        >
-          <Typography>
-            <span
-              style={{
-                marginTop: "10px",
-                color: "#333232",
-                fontSize: "30px",
-                fontWeight: "bold",
-              }}
-            >
-              Login
+    if (reactLocalStorage.get("token")) {
+      return <Redirect to="/tasks" />;
+    }else{
+      return (
+        <div className="account">
+          <Box
+            boxShadow={3}
+            bgcolor="background.paper"
+            m={1}
+            p={1}
+            style={{ width: "500px", height: "400px", padding: "20px" }}
+          >
+            <Typography>
+              <span
+                style={{
+                  marginTop: "10px",
+                  color: "#333232",
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                }}
+              >
+                Login
             </span>
-          </Typography>
-          <Typography color="textSecondary">Welcome back!</Typography>
-          <br />
-          <br />
-          <Alert severity="error" style={{ display: this.state.alert }}>
-            {this.state.errormsg}
-          </Alert>
-          <br />
-          <form onSubmit={this.handleSubmit}>
-            <Grid container spacing={1} item>
-              <Grid item xs={6} sm={12}>
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  type="email"
-                  placeholder="email "
-                  name="email"
-                />
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <OutlinedInput
-                  fullWidth
-                  margin="dense"
-                  type={this.state.showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  name="password"
-                  endAdornment={
-                    <InputAdornment>
-                      <IconButton onClick={this.handleClickShowPassword}>
-                        {this.state.showPassword ? (
-                          <Visibility />
-                        ) : (
-                          <VisibilityOff />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-              </Grid>
-              <Grid item xs={6} sm={12}>
-                <Button
-                  variant="outlined"
-                  size="medium"
-                  color="primary"
-                  fullWidth
-                  className="account-btn"
-                  type="submit"
-                >
-                  Login
+            </Typography>
+            <Typography color="textSecondary">Welcome back!</Typography>
+            <Alert severity={this.state.alerttype} style={{ display: this.state.alert, marginTop: "50px" }}>
+              {this.state.errormsg}
+            </Alert>
+            <br />
+            <form onSubmit={this.handleSubmit}>
+              <Grid container spacing={1} item>
+                <Grid item xs={12} sm={12}>
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    type="email"
+                    placeholder="email "
+                    name="email"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <OutlinedInput
+                    fullWidth
+                    margin="dense"
+                    type={this.state.showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    name="password"
+                    endAdornment={
+                      <InputAdornment>
+                        <IconButton onClick={this.handleClickShowPassword}>
+                          {this.state.showPassword ? (
+                            <Visibility />
+                          ) : (
+                              <VisibilityOff />
+                            )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <Button
+                    variant="outlined"
+                    size="medium"
+                    color="primary"
+                    fullWidth
+                    className="account-btn"
+                    type="submit"
+                  >
+                    Login
                 </Button>
-              </Grid>
-              <Link to="/register">
-                <Typography style={{ marginLeft: "4px" }} color="textSecondary">
-                  I don't have account...
+                </Grid>
+                <Link to="/register">
+                  <Typography style={{ marginLeft: "4px" }} color="textSecondary">
+                    I don't have account...
                 </Typography>
-              </Link>
-            </Grid>
-          </form>
-        </Box>
-      </div>
-    );
+                </Link>
+              </Grid>
+            </form>
+          </Box>
+        </div>
+      )
+    }
+    ;
   }
 }
 

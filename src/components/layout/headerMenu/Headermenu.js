@@ -23,6 +23,8 @@ import { Link } from "react-router-dom";
 
 
 import Badge from "@material-ui/core/Badge";
+import Logout from "../../acount/logout";
+import { reactLocalStorage } from "reactjs-localstorage";
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -92,9 +94,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 export default function SIdemenu() {
   const classes = useStyles();
   const [open] = React.useState(true);
+  const userdata = JSON.parse(reactLocalStorage.get('user'))[0]
+  const username = userdata.name.split(" ")
   return (
     <Drawer
       className={classes.drawer}
@@ -116,10 +122,10 @@ export default function SIdemenu() {
               }}
               variant="dot"
             >
-              <Avatar alt="Naresh" src="" />
+              <Avatar alt={username[0]} src="." />
             </StyledBadge>
           </ListItemIcon>
-          <ListItemText className="clrwhite" primary={`Hi Naresh !`} />
+          <ListItemText className="clrwhite" primary={username[0]} />
         </ListItem>
         <IconButton>
           <ChevronLeftIcon />
@@ -183,13 +189,8 @@ export default function SIdemenu() {
             <ListItemText className="clrwhite" primary={`Profile`} />
           </ListItem>
         </Link>
-        <Link to="/login">
-          <ListItem button>
-            <ListItemIcon className="clrwhite">
-              <MeetingRoomIcon />
-            </ListItemIcon>
-            <ListItemText className="clrwhite" primary={`Logout`} />
-          </ListItem>
+        <Link to="/login" >
+          <Logout/>
         </Link>
       </List>
     </Drawer>
