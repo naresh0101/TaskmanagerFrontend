@@ -12,7 +12,6 @@ import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import CloudDoneIcon from '@material-ui/icons/CloudDone';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
-import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SendIcon from '@material-ui/icons/Send';
 import FolderIcon from '@material-ui/icons/Folder';

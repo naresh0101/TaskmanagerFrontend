@@ -36,8 +36,8 @@ class Login extends Component {
     };
     PostApiService.acountResponse("login", payload).then((resp) => {
       console.log(resp.user);      
-      if (resp.user.api_key) {        
-        reactLocalStorage.set('token',resp.user.api_key)
+      if (resp.token) {        
+        reactLocalStorage.set('token',resp.token)
         reactLocalStorage.set('user', JSON.stringify([resp.user]))
       }
       this.setState({ errormsg: resp.message, alerttype: "error" });

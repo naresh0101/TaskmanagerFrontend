@@ -5,15 +5,19 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Collapse from "@material-ui/core/Collapse";
 import Box from "@material-ui/core/Box";
-import IconButton from "@material-ui/core/IconButton";
-import { Avatar, Divider, Typography } from "@material-ui/core";
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { Avatar, Divider } from "@material-ui/core";
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { reactLocalStorage } from "reactjs-localstorage";
 import BaseService from "../../../api/GetResponse";
-import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
-import StarSharpIcon from "@material-ui/icons/StarSharp";
-import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
-import Badge from "@material-ui/core/Badge";
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';import Badge from "@material-ui/core/Badge";
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
+import DeleteResponse from '../../../api/DeleteResponse';
+
+
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -55,16 +59,32 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Alltodo() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const [tasks, settasks] = useState([])
-  function handleCollapse(id){
-    
-  }
-  const handleClick = () => {
-    setOpen(!open);
+  const [tasks, settasks] = useState([
+    {
+      "status": "true",
+      "_id": "5ef3d1232cafd40a78964e4b",
+      "tasktitle": "Hello I'm demo task",
+      "assignby": "Auther@naresh0101.com",
+      "describe": "This is a demo task that you can see and there are lote that need to be improve",
+      "project": "Home",
+      "like": "false",
+      "assignto": "admin@gmail.com",
+      "updatedAt": "2020-06-24T22:18:11.712Z",
+      "createdAt": "2020-06-24T22:18:11.712Z",
+      "__v": 0
+    }
+  ])
+  const [checked, setChecked] = React.useState([]);
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+    setChecked(newChecked);
   };
-
-      
     useEffect(() => {
     BaseService.getResponse('gettasks',
       reactLocalStorage.get('token')).then((resp)=>{
@@ -76,77 +96,86 @@ export default function Alltodo() {
         var options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(string).toLocaleDateString([],options);
     }
-
-
-
+    function deletetask(taskid){    
+      DeleteResponse.deleteResponse(`delete-task?id=${taskid}`,
+        reactLocalStorage.get('token')).then((resp) => {
+          console.log(resp);
+          // settasks(resp.data);
+      })
+    }
   return (
     <Fragment>
-      <Typography variant="h5">Your Tasks </Typography>
+      <Alert severity="info" >
+        <AlertTitle>Tasks </AlertTitle>
+        Click on square box to <strong>open (describe) and to mark done</strong>
+      </Alert>
       <List
         component="nav"
         aria-labelledby="nested-list-subheader"
         className={classes.root}
       >
-        {tasks.map((tasks, index) => (
+        {tasks.map((task, index) => (
           <Fragment key={index}>
             <Box boxShadow={2} bgcolor="background.paper">
-              <ListItem
-                style={{ cursor: "pointer" }}
-                onClick={handleClick}
-              >
-                <IconButton aria-label="delete" className={classes.margin}>
-                  {tasks.status ? (
-                    <CheckCircleIcon style={{ color: "red" }} />
-                  ) : (
-                    <RadioButtonUncheckedIcon />
-                  )}
-                </IconButton>
-                <IconButton
-                  aria-label="delete"
-                  className={classes.margin}
-                  style={{
-                    marginRight: "5px",
-                  }}
-                >
-                  {tasks.like ? (
-                    <StarSharpIcon
-                      style={{ color: "#D4AF37" }}
+              <ListItem key={index} button>
+                <ListItemAvatar>
+                  <Checkbox
+                    edge="end"
+                    onChange={handleToggle(index)}
+                    checked={checked.indexOf(index) !== -1}
+                    inputProps={{ 'aria-labelledby': index }}
+                  />
+                </ListItemAvatar>
+                <ListItemAvatar button>
+                  {task.like === "true" ? (
+                    <FavoriteIcon
+                      style={{ color: "red" }}
                     />
                   ) : (
-                    <StarBorderOutlinedIcon />
-                  )}
-                </IconButton>
-                <ListItemText
-                  // onClick={handleClick}
-                  title="Click to more info"
-                  primary={tasks.tasktitle}
-                />
-                <p variant="h6" style={{ marginRight: "5px" }}>
-                  {formatDate(tasks.createdAt)}
-                </p>
-                <StyledBadge
-                  overlap="circle"
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                  }}
-                  variant="dot"
-                >
-                  <Avatar alt={tasks.assignby} fontSize="small">
-                    {tasks.assignby[0]}
-                  </Avatar>
-                </StyledBadge>
+                      <FavoriteBorderIcon />
+                    )}
+                </ListItemAvatar>
+                
+                <ListItemSecondaryAction>
+                  <StyledBadge
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                  >
+                    <ListItemText primary={formatDate(task.createdAt)} style={{marginRight:"10px"}} />
+
+                    <Avatar alt={task.assignby} fontSize="small">
+                      {task.assignby[0]}
+                    </Avatar>
+                  </StyledBadge>
+                </ListItemSecondaryAction>
+                <ListItemText primary={task.tasktitle} />
               </ListItem>
+
             </Box>
-            <Box boxShadow={1} bgcolor="background.paper">
-              <Collapse in={handleCollapse({index})} id={index}>
+            <Box boxShadow={1} style={{ background:'#ded9d95e'}}>
+              <Collapse in={checked.indexOf(index) !== -1} id={index}>
                 <List disablePadding>
                   <ListItem className={classes.nested}>
-                    <ListItemText primary={`Assign by     ${tasks.assignby}`} />
+                    <ListItemText primary={`Assign by     ${task.assignby}`} />
+                    <Button variant="outlined" size="small" onClick={() => deletetask(task._id)} className={classes.margin}>
+                      Mark Done
+                     </Button>
                     <Divider />
                   </ListItem>
+                  
+                  <ListItemSecondaryAction>
+                    <StyledBadge
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                    >
+                    </StyledBadge>
+                  </ListItemSecondaryAction>
                   <ListItem className={classes.nested}>
-                    <ListItemText secondary={tasks.describe} />
+                    <ListItemText secondary={task.describe} />
                     <Divider />
                   </ListItem>
                   

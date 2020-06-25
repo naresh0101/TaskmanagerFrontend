@@ -1,7 +1,6 @@
 class BaseService {
  
   async getResponse(path,token) {   
-    
     const payload = {
       method: "GET",
       headers: new Headers({

@@ -21,7 +21,7 @@ import "./index.css";
 class Register extends Component {
   state = {
     selectedDate: new Date("2014-08-18T21:11:54"),
-    usertype: [{ type: "normal" }, { type: "admin" }, { type: "SDE" }],
+    usertype: [{ type: "normal" }, { type: "admin" }, { type: "sde" }],
     alert: "none",
     send2login:false,
     errormsg: "Hello Thanks, for coming Taskmanager ",
@@ -45,11 +45,15 @@ class Register extends Component {
     PostApiService.acountResponse("register", payload).then((resp) => {
       if (resp.success) {
         this.setState({ send2login: true });
+      }else{
+        this.setState({ errormsg: resp.message, alerttype: "error" });
       }
-      this.setState({ errormsg: resp.message, alerttype: "error" });
-    }); // handle errors if needed
+    });
   };
   render() {
+    if(this.state.send2login){
+      return <Redirect to="/login" />;
+    }
     if (reactLocalStorage.get("token")) {
       return <Redirect to="/tasks" />;
     }else{
